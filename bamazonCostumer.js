@@ -25,8 +25,10 @@ connection.connect(function(err) {
   readProducts(); 
   buyProduct();
 });
+
+
 function readProducts() {
-  console.log("Selecting all products...\n");
+  console.log("Welcome to Bamazon Store !!!\n");
   connection.query("SELECT * FROM products", function(err, res) {
     if (err) throw err;
     // Log all results of the SELECT statement
@@ -42,9 +44,8 @@ function readProducts() {
     })
   } console.table(productArray);
 })     
-}
-var buyProduct = 
-function () {
+}  
+function buyProduct() {
   connection.query("SELECT * FROM products", function(err, res) {
     // console.log(res);
   inquirer
@@ -82,7 +83,9 @@ function quantity (id){
     .then(function(answer){
         if (answer.productQuantity <= res[0].stock_quantity){
           var newTotal = res[0].stock_quantity - answer.productQuantity;
+          var totalPrice = res[0].price * answer.productQuantity;
           updateQuantity(newTotal, id); 
+          console.log("Your Total is $" + totalPrice); 
         }
         else {
           console.log("Insufficient quantity!")
