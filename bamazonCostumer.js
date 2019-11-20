@@ -109,3 +109,4 @@ function updateQuantity (newTotal, id){
   );
 
 }
+
