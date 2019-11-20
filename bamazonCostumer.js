@@ -1,5 +1,5 @@
 var mysql = require("mysql");
-var clitable3 = require('cli-table3');
+var Table = require('cli-table3');
 var inquirer = require('inquirer'); 
 // var inquirer = require('inquirer');
 
@@ -30,14 +30,23 @@ function readProducts() {
   connection.query("SELECT * FROM products", function(err, res) {
     if (err) throw err;
     // Log all results of the SELECT statement
-    console.log(res);
- 
-  });
+    var productArray = [];  
+
+    for (var i = 0; i < res.length; i++) {
+      productArray.push({
+        id: res[i].item_id, 
+        name: res[i].product_name, 
+        department: res[i].department_name, 
+        price: res[i].price, 
+        quantity: res[i].stock_quantity   
+    })
+  } console.table(productArray);
+})     
 }
 var buyProduct = 
 function () {
   connection.query("SELECT * FROM products", function(err, res) {
-    console.log(res);
+    // console.log(res);
   inquirer
     .prompt({
       name: "productChoice",
@@ -83,7 +92,6 @@ function quantity (id){
     }
 
 function updateQuantity (newTotal, id){
-  console.log(id, "?"); 
   var query = connection.query(
     "UPDATE products SET ? WHERE ?",
     [
@@ -97,10 +105,7 @@ function updateQuantity (newTotal, id){
     function(err, res) {
       if (err) throw err;
       console.log(res.affectedRows + " products updated!\n");
-      // Call deleteProduct AFTER the UPDATE completes
     }
   );
-
-  // connection.query("SELECT * FROM bamazon_db.products WHERE item_id = " + id, function(err, res) {
 
 }
